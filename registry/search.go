@@ -38,14 +38,14 @@ type SearchResult struct {
 // to be returned per page.
 //
 // Docker Registry API docs: https://docs.docker.com/reference/api/registry_api/#search
-func (s *SearchService) Query(query string, page, num int) (*SearchResults, error) {
+func (s *SearchService) Query(query string, page, num int, auth Authenticator) (*SearchResults, error) {
 	params := url.Values{}
 	params.Add("q", query)
 	params.Add("page", strconv.Itoa(page))
 	params.Add("n", strconv.Itoa(num))
 	path := fmt.Sprintf("search?%s", params.Encode())
 
-	req, err := s.client.newRequest("GET", path, NilAuth{}, nil)
+	req, err := s.client.newRequest("GET", path, auth, nil)
 	if err != nil {
 		return nil, err
 	}
